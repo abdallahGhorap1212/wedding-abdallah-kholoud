@@ -262,16 +262,34 @@
     try { return localStorage.getItem(KEY) !== 'off'; } catch (e) { return true; }
   }
 
-  // المتصفحات بتمنع الصوت قبل أول لمسة — فبنشغّل مع أول تفاعل
-  function armed() {
-    if (userToggled || !audio.paused || !wanted()) return;
-    play();
-  }
-  ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(function (e) {
-    window.addEventListener(e, armed, { once: true, passive: true });
-  });
+  // ── التشغيل التلقائي ──
+  // المتصفحات بتمنع الصوت من غير تفاعل، فبنحاول على طول — ولو اتمنع
+  // بنفضل مستنيين أول أي تفاعل من الزائر ونشغّل ساعتها (لمسة، كليك، سكرول، زرار).
+  var EVS = ['pointerdown', 'mousedown', 'touchstart', 'touchend', 'keydown', 'click', 'wheel', 'scroll'];
 
-  // جرّب تشغّل على طول (بيشتغل لو المتصفح سامح)
-  if (wanted()) { audio.play().then(function () { fadeTo(TARGET_VOL); }).catch(function () { setUI(false); }); }
+  function disarm() {
+    EVS.forEach(function (e) { window.removeEventListener(e, tryStart); });
+    document.removeEventListener('visibilitychange', onVisible);
+  }
+
+  function tryStart() {
+    if (userToggled || !wanted()) { disarm(); return; }
+    if (!audio.paused) { disarm(); return; }
+    var p = audio.play();
+    if (p && p.then) {
+      p.then(function () { fadeTo(TARGET_VOL); disarm(); }).catch(function () { /* لسه متمنوع — نستنى تفاعل تاني */ });
+    } else {
+      fadeTo(TARGET_VOL);
+      disarm();
+    }
+  }
+
+  function onVisible() { if (!document.hidden) tryStart(); }
+
+  EVS.forEach(function (e) { window.addEventListener(e, tryStart, { passive: true }); });
+  document.addEventListener('visibilitychange', onVisible);
+
   setUI(false);
+  tryStart();                       // محاولة فورية أول ما الصفحة تفتح
+  window.addEventListener('load', tryStart);
 })();
