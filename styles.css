@@ -332,3 +332,38 @@ body.locked{overflow:hidden}
   .vlabel{display:none}
   .hero-ayah{font-size:clamp(14.5px,3.7vw,18px);max-width:none}
 }
+
+/* ═══════════ ورد الأركان في شاشة الافتتاح ═══════════ */
+.op-orn{
+  position:absolute;width:clamp(120px,26vw,270px);height:auto;
+  pointer-events:none;opacity:.85;
+  transition:opacity .6s ease,transform .9s cubic-bezier(.22,.9,.3,1);
+  animation:ornFade 1.5s ease .2s both;
+}
+@keyframes ornFade{from{opacity:0;transform:scale(.94)}to{opacity:.85}}
+.op-orn.oa{top:0;left:0}
+.op-orn.ob{top:0;right:0;transform:scaleX(-1);animation-name:ornFadeB}
+.op-orn.oc{bottom:0;left:0;transform:scaleY(-1);animation-name:ornFadeC}
+.op-orn.od{bottom:0;right:0;transform:scale(-1,-1);animation-name:ornFadeD}
+@keyframes ornFadeB{from{opacity:0;transform:scaleX(-1) scale(.94)}to{opacity:.85;transform:scaleX(-1)}}
+@keyframes ornFadeC{from{opacity:0;transform:scaleY(-1) scale(.94)}to{opacity:.85;transform:scaleY(-1)}}
+@keyframes ornFadeD{from{opacity:0;transform:scale(-.94,-.94)}to{opacity:.85;transform:scale(-1,-1)}}
+.opener.is-open .op-orn{opacity:0}
+
+/* ═══════════ ورد في عمود الغلاف ═══════════ */
+.hero-orn{
+  position:absolute;width:clamp(120px,19vw,232px);height:auto;
+  pointer-events:none;opacity:.55;
+  animation:hOrn 1.6s ease .35s both;
+}
+@keyframes hOrn{from{opacity:0}to{opacity:.55}}
+.hero-orn.ha{top:0;right:0;transform:scaleX(-1);animation-name:hOrnA}
+.hero-orn.hb{bottom:0;left:0;transform:scaleY(-1);animation-name:hOrnB}
+@keyframes hOrnA{from{opacity:0;transform:scaleX(-1) scale(.95)}to{opacity:.55;transform:scaleX(-1)}}
+@keyframes hOrnB{from{opacity:0;transform:scaleY(-1) scale(.95)}to{opacity:.5;transform:scaleY(-1)}}
+.hero-orn.hb{opacity:.5}
+.hero-in{position:relative;z-index:2}
+@media (max-width:860px){
+  .hero-orn{width:clamp(100px,28vw,160px);opacity:.36}
+  .hero-orn.hb{opacity:.32}
+}
