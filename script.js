@@ -201,7 +201,7 @@
   }
   var TRACKS = list(ext);
   var TARGET_VOL = 0.55;
-  var GAP_MS = 4000;            // فاصل بين الأغنيتين
+  var GAP_MS = 4000;            // فاصل بين الأغاني (ملّي ثانية)
   var KEY = 'wedding-music';
 
   var audio = new Audio();
