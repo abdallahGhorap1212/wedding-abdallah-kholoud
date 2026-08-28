@@ -103,46 +103,25 @@
     toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 2800);
   }
 
-  /* ── إضافة للتقويم (ملف ics) ── */
-  function stamp(d) {
-    return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) +
-      'T' + pad(d.getHours()) + pad(d.getMinutes()) + '00';
-  }
+  /* ── إضافة للتقويم — يفتح التقويم على طول ── */
   var btnCal = document.getElementById('btnCal');
   if (btnCal) {
-    btnCal.addEventListener('click', function () {
-      var ics = [
-        'BEGIN:VCALENDAR',
-        'VERSION:2.0',
-        'PRODID:-//Abdallah & Kholoud//Wedding//AR',
-        'CALSCALE:GREGORIAN',
-        'BEGIN:VEVENT',
-        'UID:wedding-abdallah-kholoud-20261010',
-        'DTSTAMP:' + stamp(WEDDING),
-        'DTSTART:' + stamp(WEDDING),
-        'DTEND:' + stamp(WEDDING_END),
-        'SUMMARY:حفل زفاف عبدالله وخلود',
-        'DESCRIPTION:من 3 عصرًا حتى 7 مساءً — يسعدنا حضوركم',
-        'LOCATION:قاعة سندريلا - قصر الأميرات، حديقة العاشر من رمضان، مدينة نصر، القاهرة',
-        'BEGIN:VALARM',
-        'TRIGGER:-P1D',
-        'ACTION:DISPLAY',
-        'DESCRIPTION:فاضل يوم على فرح عبدالله وخلود',
-        'END:VALARM',
-        'END:VEVENT',
-        'END:VCALENDAR'
-      ].join('\r\n');
+    // أجهزة آبل بتفتح تطبيق التقويم فورًا من ملف ics، والباقي بنوديه على جوجل كاليندر
+    var isApple = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) ||
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-      var blob = new Blob(['﻿' + ics], { type: 'text/calendar;charset=utf-8' });
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement('a');
-      a.href = url;
-      a.download = 'wedding-abdallah-kholoud.ics';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
-      say('تم تنزيل الموعد ✓ افتح الملف عشان يتضاف للتقويم');
+    if (!isApple) {
+      btnCal.href = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+        '&text='     + encodeURIComponent('حفل زفاف عبدالله وخلود') +
+        '&dates=20261010T120000Z/20261010T160000Z' +
+        '&details='  + encodeURIComponent('من ٣ عصرًا حتى ٧ مساءً — يسعدنا حضوركم 🤍') +
+        '&location=' + encodeURIComponent('قاعة سندريلا - قصر الأميرات، حديقة العاشر من رمضان، شارع الطيران، مدينة نصر، القاهرة');
+      btnCal.target = '_blank';
+      btnCal.rel = 'noopener';
+    }
+
+    btnCal.addEventListener('click', function () {
+      say(isApple ? 'هيفتحلك التقويم — اضغط «إضافة»' : 'هيفتح جوجل كاليندر في تبويب جديد');
     });
   }
 

@@ -1,0 +1,20 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Abdallah & Kholoud//Wedding//AR
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:wedding-abdallah-kholoud-20261010@github.io
+DTSTAMP:20260828T120000Z
+DTSTART:20261010T120000Z
+DTEND:20261010T160000Z
+SUMMARY:حفل زفاف عبدالله وخلود
+DESCRIPTION:من ٣ عصرًا حتى ٧ مساءً — يسعدنا حضوركم
+LOCATION:قاعة سندريلا - قصر الأميرات\, حديقة العاشر من رمضان\, مدينة نصر\, القاهرة
+BEGIN:VALARM
+TRIGGER:-P1D
+ACTION:DISPLAY
+DESCRIPTION:فاضل يوم على فرح عبدالله وخلود
+END:VALARM
+END:VEVENT
+END:VCALENDAR
