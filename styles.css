@@ -106,11 +106,31 @@ img,svg{max-width:100%}
   font-size:clamp(12px,3.1vw,15px);color:var(--muted);word-spacing:.18em;
 }
 
-/* ── الرسمة ── */
+/* ── الرسمة / صورة العروسين ── */
 .card-art{position:relative;margin-top:clamp(4px,1.6vw,12px)}
 .art-svg{display:block;width:100%;height:auto}
-.art-photo{display:none;width:100%;aspect-ratio:580/512;object-fit:cover}
-.has-photo .art-photo{display:block}
+
+/* الإطار القوسي — يظهر بس لما تكون فيه صورة */
+.art-frame{display:none;position:relative;width:min(430px,78%);aspect-ratio:4/5;margin-inline:auto}
+.art-frame img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  border-radius:999px 999px 20px 20px;
+  box-shadow:0 24px 60px rgba(150,105,80,.22);
+}
+.art-ring{
+  position:absolute;inset:-13px;border-radius:999px 999px 30px 30px;
+  border:1px solid var(--line);pointer-events:none;
+}
+.art-ring::before{
+  content:"";position:absolute;inset:-9px;border-radius:999px 999px 38px 38px;
+  border:1px solid rgba(233,214,202,.5);
+}
+.card-art.has-photo{
+  display:flex;justify-content:center;
+  padding:clamp(20px,4vw,34px) clamp(24px,6vw,64px) clamp(34px,6.5vw,62px);
+  background:radial-gradient(120% 80% at 50% 40%, #FCF4EE 0%, #FFFFFF 70%);
+}
+.has-photo .art-frame{display:block}
 .has-photo .art-svg{display:none}
 
 /* ═══════════ أقسام ═══════════ */
@@ -245,3 +265,31 @@ img,svg{max-width:100%}
 }
 .qr svg{display:block;width:100%;height:auto}
 .qr-cap{font-size:clamp(11.5px,2.9vw,13.5px);color:var(--muted);max-width:330px;line-height:1.8}
+
+/* ═══════════ زرار الموسيقى ═══════════ */
+.music-btn{
+  position:fixed;left:16px;bottom:16px;z-index:70;
+  width:50px;height:50px;border-radius:50%;
+  border:1px solid var(--line);background:var(--paper);color:var(--clay);
+  display:grid;place-items:center;cursor:pointer;
+  box-shadow:0 10px 26px rgba(150,105,80,.18);
+  transition:transform .25s ease,background .25s ease,color .25s ease;
+}
+.music-btn:hover{transform:translateY(-3px);background:var(--cream)}
+.music-btn:focus-visible{outline:2px solid var(--peach);outline-offset:3px}
+.music-btn .mi{width:21px;height:21px}
+.music-btn .eq{display:none;gap:3.5px;align-items:flex-end;height:19px}
+.music-btn.playing{background:var(--peach);color:#fff;border-color:transparent}
+.music-btn.playing .eq{display:flex}
+.music-btn.playing .mi{display:none}
+.eq i{width:3.5px;border-radius:2px;background:currentColor;transform-origin:bottom;animation:eq .95s ease-in-out infinite}
+.eq i:nth-child(1){height:9px;animation-delay:-.15s}
+.eq i:nth-child(2){height:19px;animation-delay:-.5s}
+.eq i:nth-child(3){height:13px;animation-delay:-.8s}
+@keyframes eq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+.music-btn.hint::after{
+  content:"";position:absolute;inset:-5px;border-radius:50%;
+  border:1.5px solid var(--peach);opacity:0;animation:ring 2.4s ease-out infinite;
+}
+@keyframes ring{0%{transform:scale(.85);opacity:.7}70%{transform:scale(1.25);opacity:0}100%{opacity:0}}
+@media (max-width:440px){.music-btn{width:46px;height:46px;left:12px;bottom:12px}}

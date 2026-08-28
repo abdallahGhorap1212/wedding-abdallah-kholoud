@@ -168,6 +168,13 @@ HTML = u'''<!DOCTYPE html>
 
 </main>
 
+<button class="music-btn" id="musicBtn" type="button" aria-pressed="false" aria-label="تشغيل موسيقى الخلفية" title="موسيقى الخلفية">
+  <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+  <svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+    <path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.8"/><circle cx="17.5" cy="16" r="2.8"/>
+  </svg>
+</button>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="script.js"></script>
 </body>

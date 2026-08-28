@@ -178,3 +178,100 @@
     });
   }
 })();
+
+/* ═══════════ موسيقى الخلفية — أغنيتين ورا بعض بالتكرار ═══════════ */
+(function () {
+  'use strict';
+  var btn = document.getElementById('musicBtn');
+  if (!btn) return;
+
+  var probe = document.createElement('audio');
+  var ext = probe.canPlayType && probe.canPlayType('audio/webm; codecs="opus"') !== '' ? 'webm' : 'm4a';
+  var TRACKS = ['audio/track-1.' + ext, 'audio/track-2.' + ext];
+  var TARGET_VOL = 0.55;
+  var KEY = 'wedding-music';
+
+  var audio = new Audio();
+  audio.preload = 'auto';
+  audio.volume = 0;
+  audio.src = TRACKS[0];
+
+  var idx = 0, userToggled = false, fadeTimer = null;
+
+  // لما الأغنية تخلص، شغّل اللي بعدها — وبعد التانية ارجع للأولى
+  audio.addEventListener('ended', function () {
+    idx = (idx + 1) % TRACKS.length;
+    audio.src = TRACKS[idx];
+    audio.play().catch(function () {});
+  });
+  // لو الصيغة مش مدعومة، جرّب الصيغة التانية مرة واحدة
+  var altTried = false, shouldPlay = false;
+  audio.addEventListener('error', function () {
+    if (altTried) return;
+    altTried = true;
+    ext = (ext === 'webm' ? 'm4a' : 'webm');
+    TRACKS = ['audio/track-1.' + ext, 'audio/track-2.' + ext];
+    audio.src = TRACKS[idx];
+    audio.load();
+    if (shouldPlay) audio.play().catch(function () {});
+  });
+  audio.addEventListener('play',  function () { setUI(true); });
+  audio.addEventListener('pause', function () { setUI(false); });
+
+  function setUI(on) {
+    btn.classList.toggle('playing', on);
+    btn.classList.toggle('hint', !on && !userToggled);
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.setAttribute('aria-label', on ? 'إيقاف موسيقى الخلفية' : 'تشغيل موسيقى الخلفية');
+  }
+
+  function fadeTo(target, done) {
+    clearInterval(fadeTimer);
+    fadeTimer = setInterval(function () {
+      var d = target - audio.volume;
+      if (Math.abs(d) < 0.03) {
+        audio.volume = target;
+        clearInterval(fadeTimer);
+        if (done) done();
+        return;
+      }
+      audio.volume = Math.min(1, Math.max(0, audio.volume + d * 0.18));
+    }, 60);
+  }
+
+  function play() {
+    shouldPlay = true;
+    var p = audio.play();
+    if (p && p.catch) p.catch(function () { setUI(false); });
+    fadeTo(TARGET_VOL);
+  }
+
+  function stop() {
+    shouldPlay = false;
+    fadeTo(0, function () { audio.pause(); });
+  }
+
+  btn.addEventListener('click', function () {
+    userToggled = true;
+    btn.classList.remove('hint');
+    if (audio.paused) { play(); try { localStorage.setItem(KEY, 'on'); } catch (e) {} }
+    else { stop(); try { localStorage.setItem(KEY, 'off'); } catch (e) {} }
+  });
+
+  function wanted() {
+    try { return localStorage.getItem(KEY) !== 'off'; } catch (e) { return true; }
+  }
+
+  // المتصفحات بتمنع الصوت قبل أول لمسة — فبنشغّل مع أول تفاعل
+  function armed() {
+    if (userToggled || !audio.paused || !wanted()) return;
+    play();
+  }
+  ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(function (e) {
+    window.addEventListener(e, armed, { once: true, passive: true });
+  });
+
+  // جرّب تشغّل على طول (بيشتغل لو المتصفح سامح)
+  if (wanted()) { audio.play().then(function () { fadeTo(TARGET_VOL); }).catch(function () { setUI(false); }); }
+  setUI(false);
+})();
