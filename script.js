@@ -28,6 +28,12 @@
     done: document.getElementById('timerDone')
   };
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function set(el, val) {
+    if (!el || el.textContent === val) return;
+    el.textContent = val;
+    el.classList.add('tick');
+    setTimeout(function () { el.classList.remove('tick'); }, 280);
+  }
 
   function tick() {
     var diff = WEDDING.getTime() - Date.now();
@@ -42,10 +48,10 @@
       return;
     }
     var s = Math.floor(diff / 1000);
-    els.days.textContent = Math.floor(s / 86400);
-    els.hours.textContent = pad(Math.floor(s / 3600) % 24);
-    els.mins.textContent = pad(Math.floor(s / 60) % 60);
-    els.secs.textContent = pad(s % 60);
+    set(els.days, String(Math.floor(s / 86400)));
+    set(els.hours, pad(Math.floor(s / 3600) % 24));
+    set(els.mins, pad(Math.floor(s / 60) % 60));
+    set(els.secs, pad(s % 60));
   }
   if (els.days) { tick(); setInterval(tick, 1000); }
 
@@ -187,8 +193,15 @@
 
   var probe = document.createElement('audio');
   var ext = probe.canPlayType && probe.canPlayType('audio/webm; codecs="opus"') !== '' ? 'webm' : 'm4a';
-  var TRACKS = ['audio/track-1.' + ext, 'audio/track-2.' + ext];
+  var N = 4;                    // عدد الأغاني
+  function list(x) {
+    var out = [];
+    for (var i = 1; i <= N; i++) out.push('audio/track-' + i + '.' + x);
+    return out;
+  }
+  var TRACKS = list(ext);
   var TARGET_VOL = 0.55;
+  var GAP_MS = 4000;            // فاصل بين الأغنيتين
   var KEY = 'wedding-music';
 
   var audio = new Audio();
@@ -197,20 +210,26 @@
   audio.src = TRACKS[0];
 
   var idx = 0, userToggled = false, fadeTimer = null;
+  var altTried = false, shouldPlay = false;
 
   // لما الأغنية تخلص، شغّل اللي بعدها — وبعد التانية ارجع للأولى
+  var gapTimer = null;
   audio.addEventListener('ended', function () {
-    idx = (idx + 1) % TRACKS.length;
+    idx = (idx + 1) % TRACKS.length;   // يبدّل بين الأغنيتين ويكرّر
     audio.src = TRACKS[idx];
-    audio.play().catch(function () {});
+    clearTimeout(gapTimer);
+    gapTimer = setTimeout(function () {
+      if (!shouldPlay) return;
+      audio.volume = 0;
+      audio.play().then(function () { fadeTo(TARGET_VOL); }).catch(function () {});
+    }, GAP_MS);
   });
   // لو الصيغة مش مدعومة، جرّب الصيغة التانية مرة واحدة
-  var altTried = false, shouldPlay = false;
   audio.addEventListener('error', function () {
     if (altTried) return;
     altTried = true;
     ext = (ext === 'webm' ? 'm4a' : 'webm');
-    TRACKS = ['audio/track-1.' + ext, 'audio/track-2.' + ext];
+    TRACKS = list(ext);
     audio.src = TRACKS[idx];
     audio.load();
     if (shouldPlay) audio.play().catch(function () {});
@@ -248,6 +267,7 @@
 
   function stop() {
     shouldPlay = false;
+    clearTimeout(gapTimer);
     fadeTo(0, function () { audio.pause(); });
   }
 
@@ -289,7 +309,62 @@
   EVS.forEach(function (e) { window.addEventListener(e, tryStart, { passive: true }); });
   document.addEventListener('visibilitychange', onVisible);
 
+  // شاشة الافتتاح بتنادي دي — الضغطة بتدي إذن التشغيل
+  window.__weddingPlay = function () { userToggled = true; btn.classList.remove('hint'); play(); };
+
   setUI(false);
   tryStart();                       // محاولة فورية أول ما الصفحة تفتح
   window.addEventListener('load', tryStart);
+})();
+/* ═══════════ شاشة الافتتاح + اسم الضيف ═══════════ */
+(function () {
+  'use strict';
+
+  /* ── اسم الضيف من الرابط: ‎...?to=أحمد‎ ── */
+  var to = '';
+  try {
+    var m = /[?&]to=([^&#]*)/.exec(location.search);
+    if (m) to = decodeURIComponent(m[1].replace(/\+/g, ' ')).trim().slice(0, 48);
+  } catch (e) { to = ''; }
+
+  if (to) {
+    var opTo = document.getElementById('opTo');
+    if (opTo) { opTo.textContent = 'إلى / ' + to; opTo.hidden = false; }
+    var line = document.getElementById('guestLine');
+    if (line) {
+      line.innerHTML = 'دعوة خاصة إلى ';
+      var b = document.createElement('b');
+      b.textContent = to;
+      line.appendChild(b);
+      line.hidden = false;
+    }
+  }
+
+  /* ── الستارة ── */
+  var opener = document.getElementById('opener');
+  var btn = document.getElementById('openerBtn');
+  if (!opener || !btn) return;
+
+  document.body.classList.add('locked');
+  opener.classList.add('ready');
+
+  function enter() {
+    btn.removeEventListener('click', enter);
+    // الضغطة دي بتدي المتصفح إذن تشغيل الصوت
+    if (typeof window.__weddingPlay === 'function') window.__weddingPlay();
+    opener.classList.add('is-open');
+    document.body.classList.remove('locked');
+    setTimeout(function () {
+      opener.style.display = 'none';
+      window.dispatchEvent(new Event('resize'));   // عشان الـ reveal يتحسب من جديد
+    }, 1350);
+  }
+  btn.addEventListener('click', enter);
+
+  // لو الجافاسكريبت اتعطل لأي سبب، الستارة متفضلش قافلة الصفحة
+  setTimeout(function () {
+    if (!opener.classList.contains('is-open') && !opener.classList.contains('ready')) {
+      document.body.classList.remove('locked');
+    }
+  }, 6000);
 })();
