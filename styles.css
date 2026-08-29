@@ -273,7 +273,7 @@ body.locked{overflow:hidden}
 @media (max-width:860px){
   /* ── الغلاف على الموبايل: صورة كاملة العرض وورقة طالعة فوقها ── */
   .hero{grid-template-columns:1fr;min-height:auto;max-height:none}
-  .hero-img{order:-1;aspect-ratio:auto;height:54svh;min-height:320px;max-height:520px;margin:0}
+  .hero-img{order:-1;aspect-ratio:auto;height:48svh;min-height:300px;max-height:480px;margin:0}
   .hero-img img{object-position:center 18%;height:100%}
   .img-frame{display:none}
 
@@ -327,11 +327,6 @@ body.locked{overflow:hidden}
   .spec{padding:clamp(28px,6.4vw,40px) clamp(18px,4.6vw,28px)}
   .spec .deco{width:30px}
   .venue{padding:clamp(26px,6vw,38px) clamp(18px,4.6vw,26px)}
-  /* ── الورد على الموبايل ── */
-  .hero-orn{width:clamp(150px,46vw,220px);opacity:.65}
-  .hero-orn.ha{top:-18px;right:-14px}
-  .hero-orn.hb{bottom:-10px;left:-14px;opacity:.6}
-
   .music-btn{width:44px;height:44px;left:14px;bottom:14px}
   .music-btn .mi{width:18px;height:18px}
 }
@@ -415,10 +410,6 @@ body.locked{overflow:hidden}
 @keyframes hOrnB{from{opacity:0;transform:scaleY(-1) scale(.95)}to{opacity:.5;transform:scaleY(-1)}}
 .hero-orn.hb{opacity:.5}
 .hero-in{position:relative;z-index:2}
-@media (max-width:860px){
-  .hero-orn{width:clamp(140px,42vw,210px);opacity:.62}
-  .hero-orn.hb{opacity:.55}
-}
 
 
 /* ═══════════ ورد إضافي في الأقسام ═══════════ */
@@ -431,4 +422,52 @@ body.locked{overflow:hidden}
 .foot .sec-orn{opacity:.55}
 @media (max-width:860px){
   .sec-orn{width:clamp(105px,32vw,150px);opacity:.5}
+}
+
+@keyframes hOrnD{from{opacity:0;transform:scale(-.95,-.95)}to{opacity:.6;transform:scale(-1,-1)}}
+
+/* ═══════════ شريط الإجراءات السفلي (موبايل) ═══════════ */
+.mbar{display:none}
+@media (max-width:860px){
+  .mbar{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    position:fixed;inset-inline:0;bottom:0;z-index:75;
+    background:rgba(253,249,241,.93);
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    border-top:1px solid var(--line-light);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    box-shadow:0 -6px 22px rgba(30,42,46,.07);
+  }
+  .mbar > *{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+    padding:11px 4px 12px;background:none;border:0;cursor:pointer;text-decoration:none;
+    color:var(--gold-d);font-family:'IBM Plex Sans Arabic',sans-serif;font-size:10.5px;font-weight:400;
+    position:relative;-webkit-tap-highlight-color:transparent;
+    transition:color .2s ease;
+  }
+  .mbar > * + *::before{
+    content:"";position:absolute;inset-inline-start:0;top:13px;bottom:13px;
+    width:1px;background:var(--line-light);
+  }
+  .mbar svg{width:19px;height:19px}
+  .mbar > *:active{color:var(--gold)}
+  .mbar #mMusic.on{color:var(--ink)}
+  .mbar #mMusic.on svg{color:var(--gold)}
+  body{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
+  .music-btn{display:none}
+  .toast{bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+}
+
+
+/* ═══════════ مكان الورد على الموبايل — بعيد عن المونوجرام والآية ═══════════ */
+@media (max-width:860px){
+  .hero-orn{width:clamp(150px,44vw,205px);animation:none;opacity:.6}
+  .hero-orn.ha{
+    top:auto;bottom:-4px;right:-20px;
+    transform:scale(-1,-1);opacity:.6;
+  }
+  .hero-orn.hb{
+    top:auto;bottom:-4px;left:-20px;
+    transform:scaleY(-1);opacity:.55;
+  }
 }
