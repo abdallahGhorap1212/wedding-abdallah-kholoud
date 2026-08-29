@@ -271,17 +271,61 @@ body.locked{overflow:hidden}
 .reveal.in{opacity:1;transform:none}
 
 @media (max-width:860px){
-  .hero{grid-template-columns:1fr;min-height:auto}
-  .hero-img{order:-1;aspect-ratio:4/5;max-height:66svh}
-  .hero-text{padding-block:clamp(36px,8vw,60px) clamp(52px,10vw,72px)}
+  /* ── الغلاف على الموبايل: صورة كاملة العرض وورقة طالعة فوقها ── */
+  .hero{grid-template-columns:1fr;min-height:auto;max-height:none}
+  .hero-img{order:-1;aspect-ratio:4/5;max-height:none;margin:0}
+  .hero-img img{object-position:center 16%;height:100%}
+  .img-frame{display:none}
+
+  .hero-text{
+    position:relative;z-index:3;
+    margin-top:-34px;
+    background:var(--cream);
+    border-radius:30px 30px 0 0;
+    padding:0 clamp(22px,6vw,34px) clamp(44px,10vw,64px);
+    box-shadow:0 -14px 30px rgba(30,42,46,.06);
+  }
+  .hero-in{display:flex;flex-direction:column;max-width:none}
+
+  /* المونوجرام ميدالية قاعدة على حد الصورة */
+  .crest{
+    order:-1;
+    width:clamp(96px,25vw,124px);
+    margin:-52px auto clamp(16px,3.4vw,24px);
+    padding:9px;border-radius:50%;
+    background:var(--cream);
+    box-shadow:0 8px 22px rgba(30,42,46,.10);
+  }
+  .guest{order:-1;margin:0 0 -6px}
+
+  .hero-ayah{font-size:clamp(15px,3.9vw,19px);line-height:2.2;max-width:none;margin-bottom:2px}
+  .hero-ayah-src{margin-bottom:clamp(18px,4vw,26px)}
+  .kicker{font-size:11.5px;margin-bottom:2px}
+  .names{font-size:clamp(42px,12vw,60px);gap:10px}
+  .rule{width:min(200px,58%);margin-block:clamp(14px,3.4vw,20px)}
+  .hero-in .lede{font-size:clamp(13.5px,3.6vw,16px);line-height:2}
+  .datebar{max-width:none;gap:10px;margin-top:clamp(22px,5vw,30px)}
+  .db-lbl{font-size:10px}
+  .db-side b{font-size:clamp(14px,3.8vw,17px)}
+  .db-day{font-size:clamp(44px,13vw,60px)}
+  .hero-place{font-size:13px;margin-top:clamp(14px,3.4vw,20px)}
   .cue{display:none}
+  .vlabel{display:none}
+
+  /* الأقسام */
+  .panel{padding:clamp(46px,11vw,72px) clamp(20px,5.4vw,32px)}
+  .stitle{margin-bottom:clamp(22px,5.4vw,32px)}
   .v-grid{grid-template-columns:1fr;justify-items:center;gap:24px}
   .v-act{text-align:center}
   .v-act .btn-row{justify-content:center}
   .spec-grid{grid-template-columns:1fr}
-  .sc{border-inline-start:0;border-top:1px solid var(--line-light);padding-block:clamp(22px,4vw,30px)}
+  .sc{border-inline-start:0;border-top:1px solid var(--line-light);padding-block:clamp(22px,5vw,30px)}
   .sc:first-child{border-top:0;padding-top:0}
-  .d-tl,.d-tr,.d-bl,.d-br{width:44px}
+  .spec{padding:clamp(28px,6.4vw,40px) clamp(18px,4.6vw,28px)}
+  .spec .deco{width:30px}
+  .venue{padding:clamp(26px,6vw,38px) clamp(18px,4.6vw,26px)}
+  .music-btn{width:44px;height:44px;left:14px;bottom:14px}
+  .music-btn .mi{width:18px;height:18px}
 }
 @media (max-width:430px){
   .timer{grid-template-columns:repeat(2,1fr)}
