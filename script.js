@@ -88,41 +88,39 @@
   onScroll();
 
   /* ── التقويم: يفتح التقويم على طول ── */
-  var isApple = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) ||
-                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  var GCAL = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
-    '&text='     + encodeURIComponent('حفل زفاف عبدالله وخلود') +
-    '&dates=20261010T120000Z/20261010T160000Z' +
-    '&details='  + encodeURIComponent('من ٣ عصرًا حتى ٧ مساءً — يسعدنا حضوركم') +
-    '&location=' + encodeURIComponent('قاعة سندريلا - قصر الأميرات، حديقة العاشر من رمضان، شارع الطيران، مدينة نصر، القاهرة');
-
-  ['btnCal', 'mCal'].forEach(function (id) {
-    var el = document.getElementById(id);
-    if (!el) return;
-    if (!isApple) { el.href = GCAL; el.target = '_blank'; el.rel = 'noopener'; }
-    el.addEventListener('click', function () {
+  var btnCal = document.getElementById('btnCal');
+  if (btnCal) {
+    var isApple = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) ||
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (!isApple) {
+      btnCal.href = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+        '&text='     + encodeURIComponent('حفل زفاف عبدالله وخلود') +
+        '&dates=20261010T120000Z/20261010T160000Z' +
+        '&details='  + encodeURIComponent('من ٣ عصرًا حتى ٧ مساءً — يسعدنا حضوركم') +
+        '&location=' + encodeURIComponent('قاعة سندريلا - قصر الأميرات، حديقة العاشر من رمضان، شارع الطيران، مدينة نصر، القاهرة');
+      btnCal.target = '_blank';
+      btnCal.rel = 'noopener';
+    }
+    btnCal.addEventListener('click', function () {
       say(isApple ? 'هيفتحلك التقويم — اضغط «إضافة»' : 'هيفتح جوجل كاليندر في تبويب جديد');
     });
-  });
+  }
 
   /* ── مشاركة واتساب ── */
-  var shareText = 'دعوة زفاف عبدالله وخلود\n' +
-    'السبت ١٠ أكتوبر ٢٠٢٦ — من ٣ عصرًا حتى ٧ مساءً\n' +
-    'قاعة سندريلا — قصر الأميرات، حديقة العاشر من رمضان\n' + location.href;
-  var waURL = 'https://wa.me/?text=' + encodeURIComponent(shareText);
-
-  ['btnShare', 'mShare'].forEach(function (id) {
-    var el = document.getElementById(id);
-    if (!el) return;
-    el.href = waURL;
-    el.addEventListener('click', function (e) {
+  var btnShare = document.getElementById('btnShare');
+  if (btnShare) {
+    var text = 'دعوة زفاف عبدالله وخلود\n' +
+      'السبت ١٠ أكتوبر ٢٠٢٦ — من ٣ عصرًا حتى ٧ مساءً\n' +
+      'قاعة سندريلا — قصر الأميرات، حديقة العاشر من رمضان\n' + location.href;
+    btnShare.href = 'https://wa.me/?text=' + encodeURIComponent(text);
+    btnShare.addEventListener('click', function (e) {
       if (navigator.share) {
         e.preventDefault();
-        navigator.share({ title: 'دعوة زفاف عبدالله وخلود', text: shareText })
-          .catch(function () { window.open(waURL, '_blank', 'noopener'); });
+        navigator.share({ title: 'دعوة زفاف عبدالله وخلود', text: text })
+          .catch(function () { window.open(btnShare.href, '_blank', 'noopener'); });
       }
     });
-  });
+  }
 
   /* ── نسخ الرابط ── */
   var btnCopy = document.getElementById('btnCopy');
@@ -198,18 +196,10 @@
   audio.addEventListener('play',  function () { setUI(true); });
   audio.addEventListener('pause', function () { setUI(false); });
 
-  var mBtn = document.getElementById('mMusic');
-  var mLbl = document.getElementById('mMusicLbl');
-
   function setUI(on) {
     btn.classList.toggle('playing', on);
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     btn.setAttribute('aria-label', on ? 'إيقاف موسيقى الخلفية' : 'تشغيل موسيقى الخلفية');
-    if (mBtn) {
-      mBtn.classList.toggle('on', on);
-      mBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    }
-    if (mLbl) mLbl.textContent = on ? 'إيقاف' : 'الموسيقى';
   }
 
   function fadeTo(target, done) {
@@ -238,13 +228,11 @@
     fadeTo(0, function () { audio.pause(); });
   }
 
-  function toggle() {
+  btn.addEventListener('click', function () {
     userToggled = true;
     if (audio.paused) { play();  try { localStorage.setItem(KEY, 'on');  } catch (e) {} }
     else              { stop();  try { localStorage.setItem(KEY, 'off'); } catch (e) {} }
-  }
-  btn.addEventListener('click', toggle);
-  if (mBtn) mBtn.addEventListener('click', toggle);
+  });
 
   function wanted() {
     try { return localStorage.getItem(KEY) !== 'off'; } catch (e) { return true; }

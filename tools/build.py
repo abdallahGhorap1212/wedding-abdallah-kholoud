@@ -21,7 +21,7 @@ HTML = u'''<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans+Arabic:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=7">
+<link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
 
@@ -230,27 +230,8 @@ HTML = u'''<!DOCTYPE html>
   </svg>
 </button>
 
-<nav class="mbar" aria-label="إجراءات سريعة">
-  <button type="button" id="mMusic" aria-pressed="false">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.6"/><circle cx="17.5" cy="16" r="2.6"/></svg>
-    <span id="mMusicLbl">الموسيقى</span>
-  </button>
-  <a id="mCal" href="event.ics">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18M12 13v5M9.5 15.5h5"/></svg>
-    <span>التقويم</span>
-  </a>
-  <a href="https://www.google.com/maps/search/?api=1&amp;query=%D9%82%D8%B5%D8%B1%20%D8%A7%D9%84%D8%A3%D9%85%D9%8A%D8%B1%D8%A7%D8%AA%20%D8%AD%D8%AF%D9%8A%D9%82%D8%A9%20%D8%A7%D9%84%D8%B9%D8%A7%D8%B4%D8%B1%20%D9%85%D9%86%20%D8%B1%D9%85%D8%B6%D8%A7%D9%86%20%D9%85%D8%AF%D9%8A%D9%86%D8%A9%20%D9%86%D8%B5%D8%B1" target="_blank" rel="noopener">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
-    <span>الخريطة</span>
-  </a>
-  <a id="mShare" href="#" target="_blank" rel="noopener">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12v7a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-7"/><path d="M12 15V3.5M8 7l4-3.5L16 7"/></svg>
-    <span>مشاركة</span>
-  </a>
-</nav>
-
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="script.js?v=7"></script>
+<script src="script.js?v=6"></script>
 </body>
 </html>
 '''
