@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import io, sys
 qr  = io.open(sys.argv[1], encoding='utf-8').read()
+corner = io.open(sys.argv[3], encoding='utf-8').read()
+corner_inner = corner[corner.index('>')+1 : corner.rindex('</svg>')]
 out = sys.argv[2]
 
 HTML = u'''<!DOCTYPE html>
@@ -19,7 +21,7 @@ HTML = u'''<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans+Arabic:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
 
@@ -39,6 +41,8 @@ HTML = u'''<!DOCTYPE html>
     </g>
   </symbol>
 
+  <symbol id="orn" viewBox="0 0 300 300">__ORN__</symbol>
+
   <symbol id="deco" viewBox="0 0 120 120">
     <path d="M1 44 V1 H44" fill="none" stroke="currentColor" stroke-width="1.1"/>
     <path d="M11 52 V11 H52" fill="none" stroke="currentColor" stroke-width=".7" opacity=".55"/>
@@ -53,6 +57,10 @@ HTML = u'''<!DOCTYPE html>
 <div class="opener" id="opener" role="dialog" aria-label="افتح الدعوة">
   <span class="op-panel op-top" aria-hidden="true"></span>
   <span class="op-panel op-bot" aria-hidden="true"></span>
+  <svg class="op-orn oa" viewBox="0 0 300 300" aria-hidden="true"><use href="#orn"/></svg>
+  <svg class="op-orn ob" viewBox="0 0 300 300" aria-hidden="true"><use href="#orn"/></svg>
+  <svg class="op-orn oc" viewBox="0 0 300 300" aria-hidden="true"><use href="#orn"/></svg>
+  <svg class="op-orn od" viewBox="0 0 300 300" aria-hidden="true"><use href="#orn"/></svg>
   <div class="op-inner">
     <svg class="op-mono" viewBox="0 0 220 220" aria-hidden="true">
       <circle class="op-ring-a" cx="110" cy="110" r="99" fill="none" stroke="#C6A465" stroke-width="1.1" opacity=".6"/>
@@ -77,6 +85,8 @@ HTML = u'''<!DOCTYPE html>
 <!-- ═════════════ الغلاف ═════════════ -->
 <header class="hero">
   <div class="hero-text">
+    <svg class="hero-orn ha" viewBox="0 0 300 300" aria-hidden="true"><use href="#orn"/></svg>
+    <svg class="hero-orn hb" viewBox="0 0 300 300" aria-hidden="true"><use href="#orn"/></svg>
     <div class="hero-in">
       <p class="hero-ayah reveal">﴿ وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ﴾</p>
       <p class="hero-ayah-src reveal">سورة الروم</p>
@@ -107,6 +117,8 @@ HTML = u'''<!DOCTYPE html>
 
 <!-- ═════════════ العد التنازلي ═════════════ -->
 <section class="panel sand tight" id="countdown">
+  <svg class="sec-orn sa" viewBox="0 0 300 300" aria-hidden="true"><use href="#orn"/></svg>
+  <svg class="sec-orn sb" viewBox="0 0 300 300" aria-hidden="true"><use href="#orn"/></svg>
   <div class="wrap">
     <h2 class="stitle reveal">باقٍ على الفرح</h2>
     <div class="timer reveal" id="timer">
@@ -204,8 +216,8 @@ HTML = u'''<!DOCTYPE html>
 </section>
 
 <footer class="panel sand foot">
-  <svg class="deco d-bl" viewBox="0 0 120 120" aria-hidden="true"><use href="#deco"/></svg>
-  <svg class="deco d-br" viewBox="0 0 120 120" aria-hidden="true"><use href="#deco"/></svg>
+  <svg class="sec-orn sa" viewBox="0 0 300 300" aria-hidden="true"><use href="#orn"/></svg>
+  <svg class="sec-orn sb" viewBox="0 0 300 300" aria-hidden="true"><use href="#orn"/></svg>
   <svg class="seal reveal" viewBox="0 0 220 220" aria-hidden="true"><use href="#mono"/></svg>
   <p class="foot-names">عبدالله &amp; خلود</p>
   <p class="foot-dua">اللهم بارك لهما وبارك عليهما واجمع بينهما في خير</p>
@@ -219,9 +231,9 @@ HTML = u'''<!DOCTYPE html>
 </button>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="script.js"></script>
+<script src="script.js?v=6"></script>
 </body>
 </html>
 '''
-io.open(out, 'w', encoding='utf-8').write(HTML.replace('__QR__', qr))
+io.open(out, 'w', encoding='utf-8').write(HTML.replace('__QR__', qr).replace('__ORN__', corner_inner))
 print('index.html', len(HTML.encode('utf-8')), 'bytes')
