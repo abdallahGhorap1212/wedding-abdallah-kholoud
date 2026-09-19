@@ -1,0 +1,15 @@
+{
+  "name": "wedding-abdallah-kholoud",
+  "version": "1.0.0",
+  "description": "موقع دعوة زفاف — HTML/CSS/JS بس، من غير build ولا مكتبات، يشتغل على GitHub Pages على طول.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer-core": "^24.43.1"
+  }
+}

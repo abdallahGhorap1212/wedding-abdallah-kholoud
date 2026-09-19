@@ -152,7 +152,7 @@
 
   var probe = document.createElement('audio');
   var ext = probe.canPlayType && probe.canPlayType('audio/webm; codecs="opus"') !== '' ? 'webm' : 'm4a';
-  var N = 4;                     // عدد الأغاني
+  var N = 3;                     // عدد الأغاني
   var GAP_MS = 4000;             // الفاصل بينها
   var TARGET_VOL = 0.55;
   var KEY = 'wedding-music';
